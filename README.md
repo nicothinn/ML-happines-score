@@ -29,11 +29,6 @@ To process happiness survey data (2015–2019), build a machine learning model f
 ├── requirements.txt
 ├── docker-compose.yml
 └── README.md
-
-markdown
-Copiar
-Editar
-
 ---
 
 ## Dataset Description
@@ -100,63 +95,46 @@ predicted_score FLOAT,
 real_score FLOAT,
 error FLOAT,
 timestamp TIMESTAMP
-🐳 Docker Setup
+ Docker Setup
 Start all services:
 ```
+# Run the Pipeline
 
+## Requirements
+Install required Python packages (Python 3.10+):
 
-docker compose up --build
-
-Includes:
-
-Zookeeper
-
-Kafka
-
-PostgreSQL
-
-Producer
-
-Consumer
-
- Requirements
-Install packages (Python 3.10+):
-
-bash
-Copiar
-Editar
+```bash
 pip install -r requirements.txt
-Or use:
+```
 
-bash
-Copiar
-Editar
-poetry install
- Environment Variables
-Create a .env file:
+## Create a .env file:
 
-env
-Copiar
-Editar
+```bash
 DB_NAME=happines_db
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=172.30.0.1
+DB_USER=your_user
+DB_PASSWORD=your_password
+DB_HOST=your_host
 DB_PORT=5432
-Visualizations
-Model performance is stored in PostgreSQL. You can create dashboards with Power BI, Tableau, or stream monitoring tools (e.g., Grafana + PostgreSQL).
+```
+## create manually in postgres the database: 
+```sql
+CREATE DATABASE happines_db;
+```
 
-Evaluation Rubric
-Item	Points
-Repo + README	0.5
-EDA	0.5
-Model Training	0.5
-Feature Selection	0.5
-Kafka Streaming	0.5
-Kafka Consumer	0.5
-Prediction + Load	0.7
-Metric Extraction	0.3
-Final Documentation	1.0
+To start all services, run:
+
+```bash
+docker compose up --build
+```
+This will launch the following components:
+
+- Zookeeper  
+- Kafka  
+- PostgreSQL  
+- Producer  
+- Consumer
+
+
 
 
 
