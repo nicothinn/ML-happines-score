@@ -10,26 +10,27 @@ To process happiness survey data (2015–2019), build a machine learning model f
 
 ## Project Structure
 
+```bash
 ├── data/
-│ ├── raw/ # CSVs from 2015–2019
-│ └── processed/ # Cleaned and merged datasets
+│   ├── raw/                
+│   └── processed/          
 ├── model/
-│ ├── trained_stacking_model.pkl
-│ ├── imputer.pkl
-│ ├── target_encoder.pkl
-│ └── xgb_model.json
+│   ├── trained_stacking_model.pkl
+│   ├── imputer.pkl
+│   ├── target_encoder.pkl
+│   └── xgb_model.json
 ├── kafka/
-│ ├── kafka_producer.py
-│ └── kafka_consumer.py
+│   ├── kafka_producer.py
+│   └── kafka_consumer.py
 ├── notebooks/
-│ ├── 01_eda.ipynb
-│ ├── 02_modeling.ipynb
-│ └── 03_streaming_pipeline.ipynb
+│   ├── 01_eda.ipynb
+│   ├── 02_modeling.ipynb
+│   └── 03_streaming_pipeline.ipynb
 ├── .env
 ├── requirements.txt
 ├── docker-compose.yml
 └── README.md
----
+```
 
 ## Dataset Description
 
@@ -71,6 +72,7 @@ MSE = 0.0449
 ##  Streaming Pipeline
 
 ###  Producer
+
 - Reads `X_test.csv` + `y_test.csv`
 - Sends one row every 0.5s via Kafka topic `happiness_test`
 
