@@ -1,0 +1,12 @@
+polars
+pandas
+scikit-learn
+kafka-python
+python-dotenv
+sqlalchemy
+psycopg2-binary  # si usas PostgreSQL
+scikit-learn
+xgboost==1.7.6
+joblib
+kafka-python
+category_encoders

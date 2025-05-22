@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+
+  kafka-test:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-test
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-test:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+
+  postgres:
+    image: postgres:14
+    container_name: pg-happiness
+    environment:
+      POSTGRES_DB: happiness_db
+      POSTGRES_USER: your_user
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+
+  producer:
+    image: python:3.10
+    container_name: producer
+    depends_on:
+      - kafka-test
+    volumes:
+      - ./kafka/kafka_producer.py:/app/kafka_producer.py
+      - ./data:/app/data
+      - ./model:/app/model
+      - ./requirements.txt:/app/requirements.txt
+    working_dir: /app
+    command: >
+      sh -c "pip install --upgrade pip &&
+             pip install -r requirements.txt &&
+             python /app/kafka_producer.py"
+
+  consumer:
+    image: python:3.10
+    container_name: consumer
+    depends_on:
+      - kafka-test
+      - postgres
+    volumes:
+      - ./kafka/kafka_consumer.py:/app/kafka_consumer.py
+      - ./model:/app/model
+      - ./requirements.txt:/app/requirements.txt
+      - ./.env:/app/.env
+    working_dir: /app
+    command: >
+      sh -c "pip install --upgrade pip &&
+             pip install -r requirements.txt &&
+             python /app/kafka_consumer.py"
